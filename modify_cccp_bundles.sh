@@ -171,7 +171,7 @@ write_resfiles () {
     res_abbrev=$(res_one_letter_cap "$1")
     file_name="all_${1}_resfile.res"
     rm -f "$file_name" # appends if exists)
-    echo -e $"PIKAA ${res_abbrev}\nstart" >> "$file_name"
+    printf $"PIKAA ${res_abbrev}\nstart" >> "$file_name"
     log "@>> finished writing $1 resfile"
 }
 
