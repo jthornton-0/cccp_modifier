@@ -46,7 +46,7 @@ Depending on the amount of backbones used, it takes on my Linux system around
 
 The full path to the CCCP bundle directory (`-p`) is required as well as the
 number of residues per chain (`-r`) in the bundles. If either one is not
-present, or if '-r' is less than or equal to 0, an error is raised and the
+present, or if `-r` is less than or equal to 0, an error is raised and the
 programme is aborted.
 
 ```bash

@@ -144,11 +144,13 @@ fi
 
 # ------------------------------------------------------------------- CONSTANTS
 
+# --- temp files
 tmpfile="$(mktemp)"
 phnxtmp=phenix.out
 
 # -------------------------------------------------------------------  LOG
 
+# --- log function for verbose mode output
 log () {
     if [[ $_VERBOSE -eq 0 ]]; then
         echo "$@"
@@ -173,7 +175,7 @@ write_resfiles () {
     log "@>> finished writing $1 resfile"
 }
 
-# --- run Rosetta fix backbone to add side chains and hydrogen's
+# --- execute Rosetta fix backbone to add side chains and hydrogen's
 exe_Rosetta_fixbb () {
     fullpdbpath="$path_to_cccp_bundles"/"$cccp_sep${1}"/
     numfiles=$(find "$fullpdbpath" | wc -l)
@@ -193,12 +195,15 @@ exe_Rosetta_fixbb () {
     log "@>> Rosetta fixbb for $1 finished in ~$DURATION seconds"
 }
 
+# --- run Rosetta fixed backbone scripts
 run_Rosetta_fixbb () {
     create_and_cd ./poly_"${1}" && exe_Rosetta_fixbb "$1" && \
         rm score.sc && cd ../ || exit
 }
 
-rename_pdbs () { # change CCCP names to more readable ones like 'ala_0001.pdb'
+# --- rename the Rosetta output PDBs to more readable ones in the form
+# --- 'ala_0001.pdb', 'gly_0064' etc
+rename_pdbs () {
     log "@>> renaming ${1} pdbs"
     f=0
     for pdb in ./poly_"${1}"/*.pdb;
@@ -213,6 +218,8 @@ rename_pdbs () { # change CCCP names to more readable ones like 'ala_0001.pdb'
     log "@>> finished renaming ${1} pdbs"
 }
 
+# --- remove TER lines so chains are continuous, change all chains to 'A' or
+# --- user input value and set segment ID to 'A' or user value
 mod_segment_ter_chainid () {
     # remove TER lines
     log "@>> removing TER lines"
@@ -227,6 +234,8 @@ mod_segment_ter_chainid () {
         > "$tmpfile" && mv "$tmpfile" $phnxtmp
 }
 
+# --- increment the residue sequences of chains that are not A so that they
+# --- can be merged into one chain with discontinuities
 chain_resseq_mod () {
     read -ra chain_ar <<<"$chains" && len_chains=${#chain_ar[@]} && i=1 || exit
     while [ $i -le $((len_chains - 1)) ];
@@ -239,11 +248,14 @@ chain_resseq_mod () {
     done
 }
 
-clear_segid () { # clear the segment ID so it can be filled in later on
+# --- clear the segment IDs (set as chain ID by default with the CCCP server)
+# --- so that they can be easily set later on, this may be redundant TODO
+clear_segid () {
     phenix.pdbtools "$1" clear_seg_id=true \
         output.filename=$phnxtmp > /dev/null
 }
 
+# --- main function to run phenix operations
 run_phenix () {
     create_and_cd ../phenix/
     for file in ../Rosetta/poly_"${res}"/*.pdb;
@@ -270,6 +282,8 @@ create_and_cd () {
 
 # -------------------------------------------------------------------      MAIN
 
+
+# --- output system information to the terminal, if unwanted then comment out
 date=$(date '+%Y-%m-%d %H:%M:%S')
 kernal_v=$(uname -a)
 
@@ -280,6 +294,8 @@ log "Bash version ${BASH_VERSINFO[*]}"
 log ""
 log "@>> --- Starting CCCP bundle modifications"
 
+
+# --- main loop
 create_and_cd ./Rosetta
 
 for res in $residues;
@@ -296,6 +312,7 @@ do
     cd ../Rosetta
 done
 
+# --- remove the working folders
 cd ../ && rm -rf ./{phenix,Rosetta}
 
 log "@>> --- Finished CCCP bundle modifications"
