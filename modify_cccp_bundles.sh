@@ -31,7 +31,7 @@
 #   $ bash modify_cccp_bundles.sh -p "/full/path/to/CCCP" -r 28
 #
 # Author:  James Thornton
-# Version: 1.0
+# Version: 1.0.1
 # License: MIT
 #
 # References
@@ -61,7 +61,7 @@ path_to_cccp_bundles=""
 
 OPTIND=1 # reset
 
-usage="$(basename "$0") [-h] [-s A] [-z 'A B'] [-c A] [-e 'poly-'] [-a 'ala gly'] -p PATH -r INT
+usage="$(basename "$0") [-h] [-arguments]
 
 Modify CCCP generated server bundles.
 
@@ -197,12 +197,12 @@ exe_Rosetta_fixbb () {
 
 # --- run Rosetta fixed backbone scripts
 run_Rosetta_fixbb () {
-    create_and_cd ./poly_"${1}" && exe_Rosetta_fixbb "$1" && \
+    mkdir_and_cd ./poly_"${1}" && exe_Rosetta_fixbb "$1" && \
         rm score.sc && cd ../ || exit
 }
 
 # --- rename the Rosetta output PDBs to more readable ones in the form
-# --- 'ala_0001.pdb', 'gly_0064' etc
+# --- 'ala_0001.pdb', 'gly_0064.pdb' etc
 rename_pdbs () {
     log "@>> renaming ${1} pdbs"
     f=0
@@ -257,7 +257,7 @@ clear_segid () {
 
 # --- main function to run phenix operations
 run_phenix () {
-    create_and_cd ../phenix/
+    mkdir_and_cd ../phenix/
     for file in ../Rosetta/poly_"${res}"/*.pdb;
     do
         mkdir -p ../templates/poly_"${res}"
@@ -276,7 +276,7 @@ run_phenix () {
 }
 
 # --- create directory and change to it
-create_and_cd () {
+mkdir_and_cd () {
     mkdir -p "$1"; cd "$1"
 }
 
@@ -296,7 +296,7 @@ log "@>> --- Starting CCCP bundle modifications"
 
 
 # --- main loop
-create_and_cd ./Rosetta
+mkdir_and_cd ./Rosetta
 
 for res in $residues;
 do
