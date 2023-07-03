@@ -46,15 +46,17 @@ set -u -e -o pipefail
 
 # -------------------------------------------------------------------  DEFAULTS
 
-# default options
+# optional arguments
+_VERBOSE=0         # verbosity level, 0 for output to terminal, 1 for silent
 segID="A"          # segment ID
 chains='A B C D'   # chains existing in the CCCP bundles
 chainID="A"        # chain ID to change the other chains to
 cccp_sep="poly-"   # CCCP server creates folders with poly-ala, can rename dirs
-residues='ala gly' # residue names
-_VERBOSE=0
-res_per_chain=""
-path_to_cccp_bundles=""
+residues='ala gly' # residue names (currently only supports 'ala' and 'gly'
+
+# required arguments
+res_per_chain=""        # residues per chain, positive non-zero integer
+path_to_cccp_bundles="" # path to the dir containing the CCCP generated bundles
 
 
 # -------------------------------------------------------------------  CMD LINE
