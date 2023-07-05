@@ -10,6 +10,16 @@ continuous, setting the segment ID's equal and combining the chains into one
 continuous chain with gaps between chains that can be filled via loop
 stitching or other methods.
 
+The segment IDs can be changed to all of the same through segID, multiple
+chains are supported (in the form of 'A B ... X Y Z', chain IDs are changed
+to all of the same through chainID and the residues per chain are incremented
+so that they are continuous (for example, if all chains are 28 residues long,
+then chain A is untouched and chain B will start from 29 instead of 1, chain
+C from 57 etc). The path to the CCCP generated bundles must be the full path.
+
+The paths to the Rosetta /bin/, Rosetta /database/ and phenix /bin/ must be
+set before running the script. The CCCP server pads their files i.e. 00001, 00002...file.pdb so order is guaranteed with the original PDBs.
+
 The CCCP server can be found on the [Grigoryan lab website][1] where
 they were also kind enough to provide MATLAB files that also generate backbone
 atoms. The CCCP literature by the Grigoryan lab can be found in reference (1).
@@ -87,8 +97,10 @@ The following will be added in time:
 (1) G. Grigoryan, W. F. DeGrado, "Probing Designability via a Generalized Model
     of Helical Bundle Geometry", J. Mol. Biol., 405(4): 1079-1100 (2011)
 
-[Rosetta](https://www.rosettacommons.org/)
+[Grigoryan lab CCCP Server](https://www.grigoryanlab.org/cccp/)
 
-[Phenix tools](https://phenix-online.org/)
+[Rosetta commons website](https://www.rosettacommons.org/)
+
+[Phenix tools website](https://phenix-online.org/)
 
 [1]:(https://www.grigoryanlab.org/cccp/)
