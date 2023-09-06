@@ -99,7 +99,7 @@ if [ -z "$res_per_chain" ]; then
 fi
 
 if [ -z "$path_to_cccp_bundles" ]; then
-  echo "-r path_to_cccp_bundles is mandatory"
+  echo "-p path_to_cccp_bundles is mandatory"
   echo "$usage" >&2
   exit 1
 fi
